@@ -1,0 +1,158 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+body{
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game{
+    width: 1000px;
+    height: 700px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+
+.ArenaJogo{
+    width: 100%;
+    height: 300px;
+    border: 3px solid #00ff88;
+    position: relative;
+    overflow: hidden;
+    background-color: black;
+}
+
+.div_quadrado{
+    border: 1px solid #00ff88;
+}
+
+
+
+
+
+.caixaDeTexto{
+    width: 100%;
+    height: 180px;
+
+    border: 5px solid white;
+
+    padding: 20px;
+
+    font-size: 28px;
+
+    display: flex;
+    align-items: center;
+}
+
+
+.hud{
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.infoJogador{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.vidaJogador{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.div_barraDeVida{
+    width: 220px;
+    height: 30px;
+
+    background-color: red;
+}
+
+.qtdVida{
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+}
+
+
+
+.div_botoes{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.div_Iniciar{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btnOpcao{
+    width: 200px;
+    height: 70px;
+    border: 3px solid #ff7b00;
+    color: #ff7b00;
+    background-color: transparent;
+    font-size: 42px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnIniciar{
+    width: 200px;
+    height: 70px;
+    border: 3px solid #ff7b00;
+    color: #ff7b00;
+    background-color: transparent;
+    font-size: 42px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+
+}
+
+
+.btnOpcao:hover{
+    background-color: #ff7b00;
+    color: black;
+}
+
+
+.personagem{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    animation: float 2s infinite ease-in-out;
+}
+
+.personagem img{
+    width: 250px;
+}
