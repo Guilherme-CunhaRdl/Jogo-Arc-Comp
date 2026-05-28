@@ -7,6 +7,12 @@ let falasNarrador = [
     "* VAMOS COMEÇAR.",
 ];
 
+let vidaJogador = 100;
+let vidaInimigo = 100;
+let inimigoAtual = 0;
+let perguntaAtual = 0;
+let indiceFala = 0;
+
 let perguntas = [
     {
         pergunta:
@@ -152,11 +158,11 @@ let perguntas = [
         correta: 2,
     },
 ];
-let perguntaAtual = 0;
-let indiceFala = 0;
 
 function IniciarJogo() {
-    MudarJogo.innerHTML = `    
+    caixaDeTexto.innerHTML = falasNarrador[0];
+
+    MudarJogo.innerHTML = `
     <div class="hud">
 
         <div class="infoJogador">
@@ -168,96 +174,193 @@ function IniciarJogo() {
                 <span>HP</span>
 
                 <div class="div_barraDeVida">
-                    <div class="qtdVida"></div>
+
+                    <div class="qtdVida" id="qtdVida"></div>
+
                 </div>
 
-                <span>20 / 20</span>
+                <span id="textoVida">100 / 100</span>
 
             </div>
 
         </div>
 
     </div>
-    `;
 
-    ArenaJogo.innerHTML = `
-    <div class="personagem">
-<img src="assets/Mettaton.webp">
-</div>
-`;
-
-    MudarJogo.innerHTML += `    
     <div class="div_botoes" id="div_botoes">
-        <button class="btnOpcao" onclick="proximaFala()" id="Opc1">
-         Proximo
-            </button>
-            
-            <button class="btnOpcao" onclick="proximaFala()" id="Opc2">
-             Proximo
-            </button>
-            
-            <button class="btnOpcao" onclick="proximaFala()" id="Opc3">
-             Proximo
-            </button>
-            
-            <button class="btnOpcao" onclick="proximaFala()" id="Opc4">
-             Proximo
-            </button> 
+
+        <button class="btnOpcao" onclick="proximaFala()">
+            Próximo
+        </button>
+
     </div>
     `;
 
+    ArenaJogo.innerHTML = `
+    
+    <div class="personagem" id="imgPersonagens">
+        <img src="assets/Mettaton.webp" >
+    </div>
+
+    `;
 }
 
 function proximaFala() {
-
     indiceFala++;
 
     if (indiceFala < falasNarrador.length) {
-
         caixaDeTexto.innerHTML = falasNarrador[indiceFala];
-
     } else {
-
-        div_botoes.innerHTML = `
-        <button class="btnOpcao" onclick="verificarResposta(0)" id="Opc1"></button>
-
-        <button class="btnOpcao" onclick="verificarResposta(1)" id="Opc2"></button>
-
-        <button class="btnOpcao" onclick="verificarResposta(2)" id="Opc3"></button>
-
-        <button class="btnOpcao" onclick="verificarResposta(3)" id="Opc4"></button>
-        `;
-
-        iniciarPergunta();
+        mostrarPergunta();
     }
 }
 
-function iniciarPergunta() {
-
+function mostrarPergunta() {
     let pergunta = perguntas[perguntaAtual];
 
     caixaDeTexto.innerHTML = pergunta.pergunta;
 
-    Opc1.innerHTML = pergunta.alternativas[0];
+    div_botoes.innerHTML = `
 
-    Opc2.innerHTML = pergunta.alternativas[1];
+    <button class="btnOpcao" onclick="verificarResposta(0)">
+        ${pergunta.alternativas[0]}
+    </button>
 
-    Opc3.innerHTML = pergunta.alternativas[2];
+    <button class="btnOpcao" onclick="verificarResposta(1)">
+        ${pergunta.alternativas[1]}
+    </button>
 
-    Opc4.innerHTML = pergunta.alternativas[3];
+    <button class="btnOpcao" onclick="verificarResposta(2)">
+        ${pergunta.alternativas[2]}
+    </button>
+
+    <button class="btnOpcao" onclick="verificarResposta(3)">
+        ${pergunta.alternativas[3]}
+    </button>
+
+    `;
 }
 
-function verificarResposta(respostaEscolhida){
-
+function verificarResposta(respostaEscolhida) {
     let pergunta = perguntas[perguntaAtual];
 
-    if(respostaEscolhida == pergunta.correta){
-         alert("* RESPOSTA CORRETA!");
-        perguntaAtual++;
-        iniciarPergunta();
-    }else{
-        alert("* RESPOSTA ERRADA!")
-        perguntaAtual++;
-        iniciarPergunta();
+    if (respostaEscolhida == pergunta.correta) {
+        caixaDeTexto.innerHTML = "* RESPOSTA CORRETA!";
+
+        vidaInimigo -= 20;
+    } else {
+        caixaDeTexto.innerHTML = "* RESPOSTA ERRADA!";
+        vidaJogador -= 20;
     }
+
+    atualizarVida();
+
+    perguntaAtual++;
+
+    setTimeout(() => {
+        verificarFim();
+    }, 1000);
+}
+
+function atualizarVida() {
+    qtdVida.style.width = vidaJogador + "%";
+
+    textoVida.innerHTML = vidaJogador + " / 100";
+}
+
+function verificarFim() {
+    if (vidaJogador <= 0) {
+        telaDerrota();
+        return;
+    }
+
+    if (vidaInimigo <= 0) {
+        caixaDeTexto.innerHTML = "* INIMIGO DERROTADO!";
+
+        div_botoes.innerHTML = "";
+        setTimeout(() => {
+            inimigoAtual++;
+
+            proximoInimigo();
+        }, 1500);
+        return;
+    }
+
+    if (perguntaAtual < perguntas.length) {
+        mostrarPergunta();
+    } else {
+        caixaDeTexto.innerHTML = "* VOCÊ RESPONDEU TODAS AS PERGUNTAS!";
+
+        div_botoes.innerHTML = "";
+    }
+}
+
+function proximoInimigo() {
+    vidaInimigo = 100;
+
+    if (inimigoAtual == 1) {
+        imgPersonagens.innerHTML = `<img src="assets/metatton2.gif" style="width: 500px;">`;
+
+        caixaDeTexto.innerHTML = "* VOCÊ NÃO É TÃO RUIM...";
+
+        mostrarPergunta();
+    } else if (inimigoAtual == 2) {
+        imgPersonagens.innerHTML = `<img src="assets/metatton3.gif" style="width: 500px;">`;
+
+        caixaDeTexto.innerHTML = "* O SHOW ESTÁ FICANDO INTERESSANTE.";
+
+        mostrarPergunta();
+    } else if (inimigoAtual >= 3) {
+        telaVitoria();
+    }
+}
+
+function telaVitoria() {
+    ArenaJogo.innerHTML = `
+    
+    <div class="telaVitoria">
+
+        <h1>VOCÊ VENCEU!</h1>
+
+        <p>Metatton FOI DERROTADO.</p>
+
+    </div>
+
+    `;
+
+    caixaDeTexto.innerHTML = "* O SHOW... TERMINOU.";
+
+    div_botoes.innerHTML = "";
+}
+
+function telaDerrota() {
+    ArenaJogo.innerHTML = `
+    
+    <div class="telaDerrota">
+
+        <h1>GAME OVER</h1>
+
+        <p>VOCÊ FOI DERROTADO.</p>
+
+<button class="btnRestart" onclick="reiniciarJogo()">
+    REINICIAR
+</button>
+
+    </div>
+
+    `;
+
+    caixaDeTexto.innerHTML = "";
+
+    div_botoes.innerHTML = "";
+}
+
+function reiniciarJogo(){
+    vidaJogador = 100;
+    vidaInimigo = 100;
+    inimigoAtual = 0;
+    perguntaAtual = 0;
+    indiceFala = 0;
+    IniciarJogo();
+
 }
